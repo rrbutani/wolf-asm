@@ -1,7 +1,7 @@
 use std::fs;
 use std::env;
 use std::ffi::OsStr;
-use std::path::Path;
+use std::path::{Path, PathBuf};
 use std::process::Command;
 
 use rayon::prelude::*;
@@ -28,6 +28,11 @@ fn ui() {
         if entry_path.is_dir() || entry_path.extension() != Some(OsStr::new("wa")) {
             return;
         }
+
+        let entry_path = entry_path.strip_prefix(&tests_dir).map(|f| {
+            // A bad hack to make sure we get paths with `/`s instead of `\`s on Windows.
+            PathBuf::from(format!("{}/{}", tests_dir.display(), f.display()))
+        }).unwrap();
 
         println!("[ui] Running assembler on {}", entry_path.display());
         match run_assembler(&entry_path) {
@@ -69,6 +74,11 @@ fn run_pass() {
         if entry_path.is_dir() || entry_path.extension() != Some(OsStr::new("wa")) {
             return;
         }
+
+        let entry_path = entry_path.strip_prefix(&tests_dir).map(|f| {
+            // A bad hack to make sure we get paths with `/`s instead of `\`s on Windows.
+            PathBuf::from(format!("{}/{}", tests_dir.display(), f.display()))
+        }).unwrap();
 
         println!("[run-pass] Running assembler on {}", entry_path.display());
         match run_assembler(&entry_path) {
