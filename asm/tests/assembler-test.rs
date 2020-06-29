@@ -4,6 +4,7 @@ use std::ffi::OsStr;
 use std::path::{Path, PathBuf};
 use std::process::Command;
 
+use pretty_assertions::assert_eq as eq;
 use rayon::prelude::*;
 use tempfile::{NamedTempFile, TempPath};
 
@@ -52,9 +53,13 @@ fn ui() {
                 let expected_stderr = fs::read_to_string(&stderr_file)
                     .unwrap_or_else(|err| panic!("Failed to open '{}': {}", stderr_file.display(), err));
 
-                if stderr != expected_stderr {
-                    panic!("Error for '{}' did not match '{}'", entry_path.display(), stderr_file.display());
-                }
+                eq!(
+                    stderr,
+                    expected_stderr,
+                    "Error for '{}' did not match '{}'",
+                    entry_path.display(),
+                    stderr_file.display(),
+                );
 
                 println!("[ui] Finished running assembler on {}", entry_path.display());
             },
