@@ -1,0 +1,3 @@
+# Tests depend on the exact characters in these files, so we're telling git not to touch the line endings on these files.
+*.stderr binary
+*.wa binary

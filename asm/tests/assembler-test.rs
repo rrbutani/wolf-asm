@@ -51,7 +51,8 @@ fn ui() {
                 }
 
                 let expected_stderr = fs::read_to_string(&stderr_file)
-                    .unwrap_or_else(|err| panic!("Failed to open '{}': {}", stderr_file.display(), err));
+                    .unwrap_or_else(|err| panic!("Failed to open '{}': {}", stderr_file.display(), err))
+                    .replace("\r\n", "\n");
 
                 eq!(
                     stderr,
